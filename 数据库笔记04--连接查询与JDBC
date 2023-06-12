@@ -1,0 +1,84 @@
+## 6.4 连接查询
+
+### 内连接
+
+内连接是关联查询的另一种写法，只会查找到符合条件的记录。
+
+```
+SELECT 子句
+FROM 表A
+JOIN 表B ON A与B的连接条件
+[JOIN 表C ON A与C或B与C的连接条件
+...
+]
+WHERE 过滤条件
+```
+
+### 外连接
+
+外连接也用于关联查询，特点:可以将**不满足连接条件**的记录也查询出来
+
+左外连接：
+以JOIN左侧表为驱动表，该表中所有记录都要体现在结果集中，右侧表不满足连接条件的记录对应的字段全部为NULL。
+
+右外连接
+以JOIN右侧表作为驱动表，该表中的记录都要体现在结果集中，左侧表不满足连接条件的字段都补wNULL
+
+### 自连接
+
+自连接是指当前表中的一条记录可以对应自己的多条记录；
+具有相同属性的一组数据之间又存在上下级的树状结构数据。
+
+# JDBC
+
+JDBC（Java Database Connectivity）是Java官方提供的一套API，用于连接各种数据库。它提供了一组用于执行SQL语句的Java方法，以及连接到数据源和处理查询结果的一些工具和类。
+
+## 1 JDBC核心接口
+
+Connection：表示数据库的连接
+Statement：用来执行SQL语句的语句对象
+PreparedStatement：用来执行预编译SQL语句的语句对象
+ResultSet：用来表示查询结果集
+不同的DBMS都会提供一套具体的实现类，并打包为jar，这个jar包被称为连接该DBMS的驱动（Driver）。
+
+## 2 JDBC使用流程
+
+### pom.xml中添加依赖
+
+```
+ <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.15</version>
+        </dependency>
+    </dependencies>
+```
+
+### 加载JDBC驱动程序
+
+`Class.forName("com.mysql.jdbc.Driver");`
+
+### 建立数据库连接
+
+要连接到数据库，必须使用JDBC中的DriverManager类。
+DriverManager类负责管理JDBC驱动程序，它使用特定的URL和属性来获取连接。
+
+```
+String url = "jdbc:mysql://localhost:3306/mysql?
+characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedS
+tatements=true";
+String user = "root";
+String password = "root";
+Connection connection = DriverManager.getConnection(url, user, password);
+```
+
+### 执行SQL语句
+
+Statement对象执行SQL
+
+执行SQL语句的最常用方法是使用Statement对象。Statement对象用于执行静态SQL语句。PreparedStatement对象用于执行动态SQL语句。
+
+### 处理查询结果
+
+JDBC API提供了ResultSet对象，用于处理查询结果。可以使用ResultSet对象的getXXX方法获取查询结果中的数据。
